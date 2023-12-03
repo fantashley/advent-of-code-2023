@@ -1,3 +1,5 @@
+mod star_two;
+
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
@@ -36,14 +38,16 @@ fn main() {
                 }
             };
 
-            let number = String::from_iter(combined).parse::<u32>();
-            if let Ok(number) = number {
-                total += number;
-            };
+            let number = String::from_iter(combined).parse::<u32>().unwrap();
+            total += number;
         }
     }
 
     println!("The total is: {}", total);
+    println!(
+        "The total from star_two is: {:?}",
+        star_two::star_two("input.txt")
+    );
 }
 
 // The output is wrapped in a Result to allow matching on errors
