@@ -11,18 +11,20 @@ fn main() {
 
     let color_maxes = HashMap::from([(Color::Red, 12), (Color::Green, 13), (Color::Blue, 14)]);
 
-    let sum: u32 = input
-        .lines()
-        .map(|line| {
-            let game = parse_game(line);
-            match game.is_valid(&color_maxes) {
-                true => game.id as u32,
-                false => 0 as u32,
-            }
-        })
-        .sum();
+    let mut color_max_sum: u32 = 0;
+    let mut color_min_product: u32 = 0;
 
-    println!("The sum is {}", sum);
+    for line in input.lines() {
+        let game = parse_game(line);
+        color_max_sum += match game.is_valid(&color_maxes) {
+            true => game.id as u32,
+            false => 0 as u32,
+        };
+        color_min_product += game.min_power();
+    }
+
+    println!("The sum is {}", color_max_sum);
+    println!("The product is {}", color_min_product);
 }
 
 struct Game {
@@ -38,6 +40,14 @@ impl Game {
             }
         }
         true
+    }
+
+    fn min_power(&self) -> u32 {
+        let mut product: u32 = 1;
+        for color in [Color::Red, Color::Green, Color::Blue] {
+            product *= *self.color_maxes.get(&color).unwrap_or(&0) as u32;
+        }
+        product
     }
 }
 
