@@ -42,20 +42,22 @@ fn main() {
 
     let mappings: Vec<Mapping> = mapping_builder.into_iter().map(|m| m.mapping()).collect();
     let mut min_location: Option<u64> = None;
-    for seed in seeds {
-        let mut src = seed;
-        for mapping in &mappings {
-            src = mapping.get_mapping(src)
-        }
-        min_location = match min_location {
-            Some(l) => {
-                if src < l {
-                    Some(src)
-                } else {
-                    Some(l)
-                }
+    for seed in seeds.chunks_exact(2) {
+        for i in seed[0]..seed[0] + seed[1] {
+            let mut src = i;
+            for mapping in &mappings {
+                src = mapping.get_mapping(src)
             }
-            None => Some(src),
+            min_location = match min_location {
+                Some(l) => {
+                    if src < l {
+                        Some(src)
+                    } else {
+                        Some(l)
+                    }
+                }
+                None => Some(src),
+            }
         }
     }
 
