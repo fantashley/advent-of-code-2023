@@ -11,20 +11,28 @@ fn main() {
 
     let mut lines = contents.lines();
 
-    let times: Vec<u32> = lines
+    let times: Vec<u64> = lines
         .next()
         .unwrap()
-        .split_whitespace()
+        .split(':')
         .skip(1)
-        .map(|num| num.parse().unwrap())
+        .map(|num| {
+            let mut num_str = num.to_string();
+            num_str.retain(|c| !c.is_whitespace());
+            num_str.parse().unwrap()
+        })
         .collect();
 
-    let distances: Vec<u32> = lines
+    let distances: Vec<u64> = lines
         .next()
         .unwrap()
-        .split_whitespace()
+        .split(':')
         .skip(1)
-        .map(|num| num.parse().unwrap())
+        .map(|num| {
+            let mut num_str = num.to_string();
+            num_str.retain(|c| !c.is_whitespace());
+            num_str.parse().unwrap()
+        })
         .collect();
 
     let product: u64 = times
@@ -36,7 +44,7 @@ fn main() {
     println!("The product is: {}", product);
 }
 
-fn num_possibilities(time: u32, distance: u32) -> u32 {
+fn num_possibilities(time: u64, distance: u64) -> u64 {
     for i in 1..time {
         if get_distance(i, time) > distance {
             return time + 1 - 2 * i;
@@ -45,7 +53,7 @@ fn num_possibilities(time: u32, distance: u32) -> u32 {
     0
 }
 
-fn get_distance(hold_time: u32, race_time: u32) -> u32 {
+fn get_distance(hold_time: u64, race_time: u64) -> u64 {
     let speed = hold_time;
     let move_time = race_time - hold_time;
     speed * move_time
