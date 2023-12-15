@@ -11,29 +11,20 @@ fn main() {
 
     let mut lines = contents.lines();
 
-    let times: Vec<u64> = lines
-        .next()
-        .unwrap()
-        .split(':')
-        .skip(1)
-        .map(|num| {
-            let mut num_str = num.to_string();
-            num_str.retain(|c| !c.is_whitespace());
-            num_str.parse().unwrap()
-        })
-        .collect();
+    let parse_line = |line: &str| -> Vec<u64> {
+        line.split(':')
+            .skip(1)
+            .map(|num| {
+                let mut num_str = num.to_string();
+                num_str.retain(|c| !c.is_whitespace());
+                num_str.parse().unwrap()
+            })
+            .collect()
+    };
 
-    let distances: Vec<u64> = lines
-        .next()
-        .unwrap()
-        .split(':')
-        .skip(1)
-        .map(|num| {
-            let mut num_str = num.to_string();
-            num_str.retain(|c| !c.is_whitespace());
-            num_str.parse().unwrap()
-        })
-        .collect();
+    let times: Vec<u64> = parse_line(lines.next().unwrap());
+
+    let distances: Vec<u64> = parse_line(lines.next().unwrap());
 
     let product: u64 = times
         .iter()
