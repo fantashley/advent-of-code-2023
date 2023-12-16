@@ -1,7 +1,7 @@
 use std::{cmp::Ordering, collections::HashMap, fs, process::exit};
 
 const CARD_RANKS: [char; 13] = [
-    'A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2',
+    'A', 'K', 'Q', 'T', '9', '8', '7', '6', '5', '4', '3', '2', 'J',
 ];
 
 fn main() {
@@ -63,8 +63,25 @@ fn hand_type(hand: &String) -> u8 {
     for c in hand.chars() {
         counts.entry(c).and_modify(|count| *count += 1).or_insert(1);
     }
-    let mut sorted_counts: Vec<&u8> = counts.values().collect();
+
+    let j_count = *counts.get(&'J').unwrap_or(&0);
+    if j_count == 5 {
+        return 1;
+    }
+
+    let mut sorted_counts: Vec<u8> = counts
+        .iter()
+        .filter_map(|j| {
+            if *j.0 == 'J' {
+                return None;
+            }
+            return Some(*j.1);
+        })
+        .collect();
+
     sorted_counts.sort_unstable();
+    let last_num = sorted_counts.last_mut().unwrap();
+    *last_num += j_count;
 
     match sorted_counts.pop() {
         Some(5) => 1,
