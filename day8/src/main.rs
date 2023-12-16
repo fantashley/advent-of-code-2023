@@ -17,13 +17,29 @@ fn main() {
         })
         .collect();
 
-    let mut current_element = "AAA".to_string();
+    let mut current_elements: Vec<String> = map
+        .keys()
+        .filter_map(|k| {
+            if k.chars().last().unwrap() == 'A' {
+                Some(k.clone())
+            } else {
+                None
+            }
+        })
+        .collect();
+
     let mut steps = 0;
     for i in instructions {
-        let (l, r) = map.get(&current_element).unwrap();
-        current_element = if i == 'L' { l.clone() } else { r.clone() };
         steps += 1;
-        if current_element == "ZZZ" {
+        let mut all_zs = true;
+        for e in current_elements.clone().iter().enumerate() {
+            let (l, r) = map.get(e.1).unwrap();
+            current_elements[e.0] = if i == 'L' { l.clone() } else { r.clone() };
+            if current_elements[e.0].chars().last().unwrap() != 'Z' {
+                all_zs = false;
+            }
+        }
+        if all_zs {
             break;
         }
     }
