@@ -5,10 +5,11 @@ fn main() {
     let sum: i64 = contents
         .lines()
         .map(|line| {
-            let nums: Vec<i64> = line
+            let mut nums: Vec<i64> = line
                 .split_whitespace()
                 .map(|n| n.parse::<i64>().unwrap())
                 .collect();
+            nums.reverse();
             get_next_num(&nums)
         })
         .sum();
